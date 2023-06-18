@@ -1,32 +1,32 @@
 import { useState } from 'react';
 import { Input, FormBtn } from './Forma.styled';
-import { useSelector } from 'react-redux';
-import { addContact } from 'redux/sliceContact';
-import { nanoid } from 'nanoid';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+// import { addContact } from 'redux/sliceContact';
+// import { nanoid } from 'nanoid';
+import { addContactThunk } from 'redux/sliceContact';
 
 export const Forma = () => {
   const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
-  const contactsValue = useSelector(state => state.contacts);
+  const [phone, setNumber] = useState('');
+  const {contacts} = useSelector(state => state.contacts)
+  // const contactsValue = useSelector(state => state.contacts.contacts);
   const dispatch = useDispatch();
 
-  const addContacts = (name, number) => {
+  const addContacts = (name, phone) => {
     const contact = {
-      id: nanoid(),
       name,
-      number,
+      phone,
     };
-    dispatch(addContact(contact));
+    dispatch(addContactThunk(contact));
   };
 
   const hendleSubmit = event => {
     event.preventDefault();
-    const nameContacts = contactsValue.map(el => el.name.toLowerCase());
+    const nameContacts = contacts.map(el => el.name.toLowerCase());
     if (nameContacts.includes(name.toLowerCase())) {
       alert(`${name} is in your contacts`);
     } else {
-      addContacts(name, number);
+      addContacts(name, phone);
       reset();
     }
   };
@@ -34,7 +34,7 @@ export const Forma = () => {
   const hendleNameTelChange = event => {
     const { name, value } = event.currentTarget;
     if (name === 'name') setName(value);
-    if (name === 'number') setNumber(value);
+    if (name === 'phone') setNumber(value);
   };
 
   const reset = () => {
@@ -62,11 +62,11 @@ export const Forma = () => {
           Number
           <Input
             type="tel"
-            name="number"
+            name="phone"
             pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
             title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
             required
-            value={number}
+            value={phone}
             onChange={hendleNameTelChange}
           />
         </label>
