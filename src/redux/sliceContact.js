@@ -5,13 +5,19 @@ export const getContactsThunk = createAsyncThunk('contacts/fetchAll', () => {
   return getContacts();
 });
 
-export const addContactThunk = createAsyncThunk('contacts/addContact', (contact) => {
-  return addContacts(contact)
-});
+export const addContactThunk = createAsyncThunk(
+  'contacts/addContact',
+  contact => {
+    return addContacts(contact);
+  }
+);
 
-export const deleteContactThunk = createAsyncThunk('contacts/deleteContact', (id) => { 
-  return deleteContact(id)
-});
+export const deleteContactThunk = createAsyncThunk(
+  'contacts/deleteContact',
+  id => {
+    return deleteContact(id);
+  }
+);
 
 const contactSlice = createSlice({
   name: 'contacts',
@@ -47,7 +53,9 @@ const contactSlice = createSlice({
       })
       .addCase(deleteContactThunk.fulfilled, (state, { payload }) => {
         state.isLoading = false;
-        state.contacts = state.contacts.filter(contact => contact.id !== payload);
+        state.contacts = state.contacts.filter(
+          contact => contact.id !== payload.id
+        );
         state.error = '';
       })
       .addCase(deleteContactThunk.rejected, (state, { payload }) => {
